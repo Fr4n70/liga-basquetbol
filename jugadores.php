@@ -7,7 +7,6 @@
   $id_user = $_SESSION['codUsu'];
   $user  = $conector->query("SELECT * FROM usuarios WHERE codUsu='$id_user'")->fetch_assoc();
   $title = "Jugadores";
-  // Lista de equipos para el select
   $equipos = $conector->query("SELECT codEqu, nomEqu FROM equipos WHERE estEqu=1 ORDER BY nomEqu");
 ?>
 <!doctype html>
@@ -157,6 +156,21 @@
           </div>
         </div>
 
+        <!-- Modal HU-04 Stats Jugador -->
+        <div class="modal fade" id="modalStatsJug" tabindex="-1">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header bg-info text-white">
+                <h5 class="modal-title"><i class="bi bi-bar-chart-fill"></i> Estadísticas del Jugador</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body" id="contenido_stats_jug">
+                <div class="text-center"><i class="bi bi-hourglass-split fs-3 text-muted"></i> Cargando...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
@@ -164,6 +178,21 @@
 </div>
 <?php include_once 'sections/page_script.php'; ?>
 <script src="lib/jugadores.js?v=1"></script>
-<script>$(document).ready(function(){ cargarJugadores(); });</script>
+<script>
+$(document).ready(function(){ cargarJugadores(); });
+
+$(document).on('click', '.btn-stats-jug', function() {
+  var id = $(this).data('id');
+  $('#contenido_stats_jug').html('<div class="text-center"><i class="bi bi-hourglass-split fs-3 text-muted"></i> Cargando...</div>');
+  $('#modalStatsJug').modal('show');
+  $.ajax({
+    url: 'query/jugador_stats.php',
+    data: { id: id },
+    success: function(data) {
+      $('#contenido_stats_jug').html(data);
+    }
+  });
+});
+</script>
 </body>
 </html>

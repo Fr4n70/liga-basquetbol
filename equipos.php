@@ -110,6 +110,21 @@
           </div>
         </div>
 
+        <!-- Modal HU-03 Perfil Equipo -->
+        <div class="modal fade" id="modalPerfilEqu" tabindex="-1">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header bg-warning">
+                <h5 class="modal-title"><i class="bi bi-shield-fill"></i> Perfil del Equipo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body" id="contenido_perfil_equ">
+                <div class="text-center"><i class="bi bi-hourglass-split fs-3 text-muted"></i> Cargando...</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </main>
@@ -117,6 +132,21 @@
 </div>
 <?php include_once 'sections/page_script.php'; ?>
 <script src="lib/equipos.js?v=1"></script>
-<script>$(document).ready(function(){ cargarEquipos(); });</script>
+<script>
+$(document).ready(function(){ cargarEquipos(); });
+
+$(document).on('click', '.btn-perfil-equ', function() {
+  var id = $(this).data('id');
+  $('#contenido_perfil_equ').html('<div class="text-center"><i class="bi bi-hourglass-split fs-3 text-muted"></i> Cargando...</div>');
+  $('#modalPerfilEqu').modal('show');
+  $.ajax({
+    url: 'query/equipo_perfil.php',
+    data: { id: id },
+    success: function(data) {
+      $('#contenido_perfil_equ').html(data);
+    }
+  });
+});
+</script>
 </body>
 </html>

@@ -29,6 +29,11 @@
       <td class="text-center"><?php echo $est; ?></td>
       <td class="text-center">
         <div class="btn-group btn-group-sm">
+          <button class="btn btn-info btn-stats-jug"
+            data-id="<?php echo $row['codJug']; ?>"
+            title="Ver estadísticas">
+            <i class="bi bi-bar-chart-fill"></i>
+          </button>
           <button class="btn btn-primary btn-editar-jug"
             data-id="<?php echo $row['codJug']; ?>"
             data-equipo="<?php echo $row['codEqu']; ?>"

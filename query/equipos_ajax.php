@@ -25,6 +25,11 @@
       <td class="text-center"><?php echo $est; ?></td>
       <td class="text-center">
         <div class="btn-group btn-group-sm">
+          <button class="btn btn-success btn-perfil-equ"
+            data-id="<?php echo $row['codEqu']; ?>"
+            title="Ver perfil">
+            <i class="bi bi-eye-fill"></i>
+          </button>
           <button class="btn btn-primary btn-editar-equ"
             data-id="<?php echo $row['codEqu']; ?>"
             data-nom="<?php echo htmlspecialchars($row['nomEqu']); ?>"
