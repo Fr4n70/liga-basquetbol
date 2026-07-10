@@ -39,19 +39,21 @@
     LIMIT 5
   ");
 
-  // Tabla de posiciones (equipos con más victorias)
+  // Tabla de posiciones con puntos acumulados
   $posiciones = $conector->query("
     SELECT e.nomEqu,
       SUM(CASE WHEN (p.equLocPar=e.codEqu AND p.ptsLocPar>p.ptsVisPar AND p.estPar=2) OR
                     (p.equVisPar=e.codEqu AND p.ptsVisPar>p.ptsLocPar AND p.estPar=2) THEN 1 ELSE 0 END) AS victorias,
       SUM(CASE WHEN (p.equLocPar=e.codEqu AND p.ptsLocPar<p.ptsVisPar AND p.estPar=2) OR
                     (p.equVisPar=e.codEqu AND p.ptsVisPar<p.ptsLocPar AND p.estPar=2) THEN 1 ELSE 0 END) AS derrotas,
-      COUNT(CASE WHEN (p.equLocPar=e.codEqu OR p.equVisPar=e.codEqu) AND p.estPar=2 THEN 1 END) AS jugados
+      COUNT(CASE WHEN (p.equLocPar=e.codEqu OR p.equVisPar=e.codEqu) AND p.estPar=2 THEN 1 END) AS jugados,
+      SUM(CASE WHEN (p.equLocPar=e.codEqu AND p.ptsLocPar>p.ptsVisPar AND p.estPar=2) OR
+                    (p.equVisPar=e.codEqu AND p.ptsVisPar>p.ptsLocPar AND p.estPar=2) THEN 2 ELSE 0 END) AS puntos
     FROM equipos e
     LEFT JOIN partidos p ON (p.equLocPar=e.codEqu OR p.equVisPar=e.codEqu)
     WHERE e.estEqu=1
     GROUP BY e.codEqu, e.nomEqu
-    ORDER BY victorias DESC, derrotas ASC
+    ORDER BY puntos DESC, victorias DESC, derrotas ASC, e.nomEqu ASC
   ");
 ?>
 <!doctype html>
@@ -185,6 +187,7 @@
                       <th class="text-center">J</th>
                       <th class="text-center">V</th>
                       <th class="text-center">D</th>
+                      <th class="text-center">Puntos</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -195,6 +198,7 @@
                       <td class="text-center"><?php echo $p['jugados']; ?></td>
                       <td class="text-center fw-bold text-success"><?php echo $p['victorias']; ?></td>
                       <td class="text-center text-danger"><?php echo $p['derrotas']; ?></td>
+                      <td class="text-center fw-bold text-primary"><?php echo $p['puntos']; ?></td>
                     </tr>
                     <?php endwhile; ?>
                   </tbody>
